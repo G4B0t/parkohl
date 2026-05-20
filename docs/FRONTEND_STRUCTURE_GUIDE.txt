@@ -1,0 +1,300 @@
+PARKOHL FRONTEND STRUCTURE GUIDE
+================================
+
+Purpose
+-------
+This guide defines how to create new frontend pages, components, models,
+stores, and utilities in PARKOHL.
+
+The goal is to keep the project scalable, typed, predictable, and easy to
+maintain as the application grows.
+
+
+Core Rules
+----------
+1. Use TypeScript only.
+   - Component files must be .tsx.
+   - Non-component logic files must be .ts.
+   - Do not create .jsx or .js files.
+
+2. Do not use the any type.
+   - Every prop, API response, Cobra response, model, store state, payload,
+     and helper return value must be described with an interface or type.
+
+3. Prefer undefined instead of null.
+   - Optional values should use undefined.
+   - Example: user?: User instead of user: User | null.
+
+4. Components must not contain CSS code or style injection.
+   - All styles must live in styles.ts.
+   - If styles depend on conditions, pass typed props to the styled component.
+
+5. Use hooks intentionally inside components.
+   - Use useCallback for handlers.
+   - Use useMemo for derived values.
+   - Use useEffect/useLayoutEffect for side effects.
+   - Use useState for mutable component state.
+   - Use memo() for reusable or frequently rendered components.
+
+6. Avoid inline functions and mutable variables inside components when a hook
+   gives a stable and clearer alternative.
+
+7. Use global reusable components when available.
+   - Button
+   - Icon
+   - Modal window
+   - Confirm window
+   - Notification window
+   - Future shared components: Toast message, Autocomplete, Table, Form
+
+
+Main Project Folders
+--------------------
+src/
+  models/       Global entity interfaces and types
+  components/   Global reusable components
+  pages/        Page-specific components and page stores
+  store/        Global state management
+  utils/        Helper functions and custom hooks
+  types/        Global type definitions
+
+
+Models
+------
+Use src/models for global entities shared across the application.
+
+Examples:
+  src/models/User/index.ts
+  src/models/Trade/index.ts
+  src/models/Company/index.ts
+
+Rules:
+  - Define one canonical model per global entity.
+  - Import the shared model instead of redefining the entity in pages.
+  - Keep API-specific response wrappers in src/types or feature-specific types
+    unless the shape is truly a domain model.
+
+Example:
+  src/models/User/index.ts
+
+  export interface User {
+    id: string
+    name: string
+    email?: string
+  }
+
+
+Global Components
+-----------------
+Use src/components for reusable components used in multiple pages.
+
+Every component must follow this folder structure:
+
+ComponentName/
+  index.tsx       Main component file
+  styles.ts       Styled components
+  types.ts        Props, interfaces, and local type definitions
+  enums/          Component-specific enums
+  constants.ts    Values that never change
+  README.md       Optional documentation
+
+Rules:
+  - The component folder name must use PascalCase.
+  - The main component file is always index.tsx.
+  - Styles are always in styles.ts.
+  - Props are always described in types.ts.
+  - Constants are placed in constants.ts.
+  - Component-specific enums go inside enums/.
+  - If a component has child components that belong only to it, place them in:
+
+    ComponentName/components/ChildComponent/
+
+Example:
+  src/components/Form/components/CustomInput/index.tsx
+
+
+Pages
+-----
+Use src/pages for route-level screens.
+
+Each page owns the components and store logic that are used only by that page.
+
+Recommended page structure:
+
+PageName/
+  index.tsx
+  styles.ts
+  types.ts
+  constants.ts
+  enums/
+  components/
+  store/
+    actions.ts
+    selectors.ts
+    thunks.ts
+    types.ts
+    reducer.ts
+
+Rules:
+  - Page folder names must use PascalCase.
+  - Page-only components stay inside the page components/ folder.
+  - Do not put page-only components in global src/components.
+  - If a component becomes reusable across pages, move it to src/components.
+
+
+Creating A New Page
+-------------------
+1. Create the page folder:
+
+   src/pages/PageName/
+
+2. Add required files:
+
+   index.tsx
+   styles.ts
+   types.ts
+
+3. Add optional files when needed:
+
+   constants.ts
+   enums/
+   components/
+   store/
+
+4. Define page props and internal data types in types.ts.
+
+5. Define page styles in styles.ts.
+
+6. Build the component in index.tsx.
+
+7. Add page-specific store files only if the page needs isolated async state or
+   complex local domain state.
+
+8. Register the page in the route config:
+
+   src/components/ParkohlRoutes/components/Routes/index.tsx
+
+9. Add permissions to the route config when access control is introduced.
+
+
+Store
+-----
+Use src/store for global state such as:
+  - authorization
+  - modal windows
+  - filters
+  - app settings
+  - shared entities used by many pages
+
+Rules:
+  - Do not select the whole state in components.
+  - Create selectors for individual fields or meaningful groups.
+  - Group related data in the state so selectors can target stable slices.
+  - Avoid triggering redraws by selecting more state than the component needs.
+  - Keep state types explicit.
+  - Do not use any.
+
+Selector rule:
+  Good:
+    selectCurrentUser(state)
+    selectIsAuthenticated(state)
+    selectActiveFilters(state)
+
+  Avoid:
+    useSelector((state) => state)
+
+
+Utils
+-----
+Use src/utils for reusable helpers and custom hooks.
+
+Examples:
+  src/utils/formatDate.ts
+  src/utils/parseCurrency.ts
+  src/utils/useDebouncedValue.ts
+
+Rules:
+  - Utilities must be pure when possible.
+  - Custom hooks must start with use.
+  - Every utility input and return value must be typed.
+  - Do not place page-specific helpers here unless they are truly reusable.
+
+
+Types
+-----
+Use src/types for global type definitions that are not domain models.
+
+Examples:
+  src/types/api.d.ts
+  src/types/routes.ts
+  src/types/forms.ts
+
+Rules:
+  - Use models/ for global business entities.
+  - Use types/ for shared technical types and wrappers.
+
+
+Styling
+-------
+All component styles must live in styles.ts.
+
+Rules:
+  - No CSS inside component files.
+  - No inline style objects in JSX.
+  - No CSS injection inside components.
+  - Conditional styling must use typed props.
+
+Example:
+  styles.ts defines StyledPanel with an $isActive prop.
+  types.ts defines the prop type.
+  index.tsx passes $isActive to StyledPanel.
+
+
+Naming Rules
+------------
+Folders:
+  - Global components: PascalCase
+  - Pages: PascalCase
+  - Models: PascalCase
+  - Utilities: camelCase file names
+  - Store folders: camelCase or domain name matching the feature
+
+Files:
+  - index.tsx for React components
+  - styles.ts for styled components
+  - types.ts for local interfaces and types
+  - constants.ts for fixed values
+  - actions.ts, selectors.ts, thunks.ts, reducer.ts for store files
+
+
+Checklist For A New Component
+-----------------------------
+Before considering a component complete:
+
+  [ ] Component folder uses PascalCase.
+  [ ] index.tsx contains only component logic and JSX.
+  [ ] styles.ts contains all styles.
+  [ ] types.ts contains all props and local types.
+  [ ] No .js or .jsx files were created.
+  [ ] No any type was used.
+  [ ] undefined is used instead of null.
+  [ ] Handlers are wrapped with useCallback when passed down or reused.
+  [ ] Derived values are wrapped with useMemo when useful.
+  [ ] The component uses memo() when it is reusable or frequently rendered.
+  [ ] Existing reusable global components are used before creating new ones.
+
+
+Checklist For A New Page
+------------------------
+Before considering a page complete:
+
+  [ ] Page folder uses PascalCase.
+  [ ] Page has index.tsx, styles.ts, and types.ts.
+  [ ] Page-only components live inside PageName/components.
+  [ ] Page-only store lives inside PageName/store.
+  [ ] Shared models are imported from src/models.
+  [ ] Shared helpers are imported from src/utils.
+  [ ] The route is registered in ParkohlRoutes.
+  [ ] Selectors do not subscribe to the entire state.
+  [ ] Build and lint pass.
+
