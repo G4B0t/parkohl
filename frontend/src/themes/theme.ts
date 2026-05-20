@@ -7,6 +7,8 @@ export const commonColors: Record<string, string> = {
   blue: '#2563eb',
   green: '#0f8a65',
   red: '#dc2626',
+  turquoiseIcon: '#14b8a6',
+  violetIcon: '#7c3aed',
   yellow: '#b7791f',
 }
 

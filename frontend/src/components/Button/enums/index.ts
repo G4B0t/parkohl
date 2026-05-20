@@ -1,1 +1,2 @@
-export * from './ButtonVariant'
+export * from './Sizes'
+export * from './StyleTypes'

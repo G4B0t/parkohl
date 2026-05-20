@@ -1,5 +1,5 @@
 import Button from '@components/Button'
-import { ButtonVariant } from '@components/Button/enums'
+import { Sizes, StyleTypes } from '@components/Button/enums'
 import Icon from '@components/Icon'
 import { IconName } from '@components/Icon/enums'
 import { ChangeEvent, FormEvent, memo, useCallback, useMemo, useState } from 'react'
@@ -168,9 +168,12 @@ const Login = () => {
             <TextLink href="/forgot-password">Olvidaste tu contrasena?</TextLink>
           </FormOptions>
 
-          <Button fullWidth type="submit">
-            Iniciar sesion
-          </Button>
+          <Button
+            label="Iniciar sesion"
+            size={Sizes.large}
+            type="submit"
+            width100
+          />
 
           <Divider>o continua con</Divider>
 
@@ -178,11 +181,16 @@ const Login = () => {
             {SOCIAL_LOGIN_OPTIONS.map((provider) => (
               <Button
                 key={provider}
+                label={provider}
+                leftIcon={{
+                  size: 22,
+                  type: getSocialIconName(provider),
+                }}
+                size={Sizes.large}
+                styleType={StyleTypes.outlined}
                 type="button"
-                variant={ButtonVariant.secondary}>
-                <Icon name={getSocialIconName(provider)} />
-                {provider}
-              </Button>
+                width100
+              />
             ))}
           </SocialGrid>
 
