@@ -10,16 +10,19 @@ const ParkohlRoutes = () => {
       <Route path="/" element={<HomeRoute />} />
       {Object.entries(routes).map(([routeName, settings]) => {
         const Component = settings.component
+        const element = settings.isProtected ? (
+          <SafeRoute isProtected={settings.isProtected}>
+            <Component />
+          </SafeRoute>
+        ) : (
+          <Component />
+        )
 
         return (
           <Route
             key={routeName}
             path={settings.url}
-            element={
-              <SafeRoute isProtected={settings.isProtected}>
-                <Component />
-              </SafeRoute>
-            }
+            element={element}
           />
         )
       })}
