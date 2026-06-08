@@ -1,2 +1,2 @@
-export const isDef = <T>(value: T | null | undefined): value is T =>
-  value !== null && value !== undefined
+export const isDef = <T>(value: T | undefined): value is T =>
+  value !== undefined
