@@ -1,12 +1,13 @@
-import { SVGProps } from 'react'
+import { MouseEvent } from 'react';
 
-import { IconName } from './enums'
+import { ICONS_TYPES } from './constants';
 
-export interface IconProps extends SVGProps<SVGSVGElement> {
-  name: IconName
-  size?: number
-}
-
-export interface IconFrameProps {
-  $size: number
+export interface Props {
+  className?: string;
+  disabled?: boolean;
+  icon: keyof typeof ICONS_TYPES;
+  onClick?: (event: MouseEvent<HTMLElement> | KeyboardEvent) => void;
+  rotate?: number;
+  size: number;
+  tabIndex?: number;
 }

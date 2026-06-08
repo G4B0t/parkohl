@@ -1,17 +1,28 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components';
 
-import { IconFrameProps } from './types'
+import { isDef } from '@utils/def';
 
-export const IconFrame = styled.span<IconFrameProps>`
+import { Props } from './types';
+
+export const Root = styled.div`
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: nowrap;
+`;
+
+export const SvgWrapper = styled.div<Partial<Props>>`
   align-items: center;
-  color: currentColor;
-  display: inline-flex;
-  flex: 0 0 auto;
-  height: ${({ $size }) => $size}px;
+  display: flex;
+  flex-wrap: nowrap;
   justify-content: center;
-  width: ${({ $size }) => $size}px;
+  ${({ rotate, size }) => css`
+    width: ${isDef(size) ? `${size}px` : '100%'};
+    height: ${isDef(size) ? `${size}px` : '100%'};
+    transform: ${isDef(rotate) ? `rotate(${rotate}deg)` : 'none'};
+  `}
+  flex-shrink: 0;
 
   svg {
-    display: block;
+    width: 100%;
   }
-`
+`;

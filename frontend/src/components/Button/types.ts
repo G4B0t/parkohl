@@ -1,14 +1,15 @@
-import { ButtonHTMLAttributes, MouseEvent, SVGProps } from 'react'
+import { ButtonHTMLAttributes, MouseEvent } from 'react'
 import { To } from 'react-router-dom'
 
-import { IconName } from '@components/Icon/enums'
+import { ICONS_TYPES } from '@components/Icon'
+import { Props as IconProps } from '@components/Icon'
 
 import { Sizes, StyleTypes } from './enums'
 
 export interface ButtonIconProps {
-  props?: Partial<SVGProps<SVGSVGElement>>
+  props?: Partial<IconProps>
   size: number
-  type: IconName
+  type: keyof typeof ICONS_TYPES
 }
 
 export interface Props

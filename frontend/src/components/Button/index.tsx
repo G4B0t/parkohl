@@ -43,7 +43,7 @@ const Button = (
               $buttonDisabled={disabled}
               $hasLabel={hasLabel}
               {...leftIcon.props}
-              name={leftIcon.type}
+              icon={leftIcon.type}
               size={leftIcon.size}
             />
           )}
@@ -53,7 +53,7 @@ const Button = (
               $buttonDisabled={disabled}
               $hasLabel={hasLabel}
               {...rightIcon.props}
-              name={rightIcon.type}
+              icon={rightIcon.type}
               size={rightIcon.size}
             />
           )}

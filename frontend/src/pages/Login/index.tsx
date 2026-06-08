@@ -1,7 +1,7 @@
 import Button from '@components/Button'
 import { Sizes, StyleTypes } from '@components/Button/enums'
 import Icon from '@components/Icon'
-import { IconName } from '@components/Icon/enums'
+import { ICONS_TYPES } from '@components/Icon'
 import { ChangeEvent, FormEvent, memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '@store/useAppStore'
@@ -89,7 +89,7 @@ const Login = () => {
   }, [loginAsDemo, navigate])
 
   const getSocialIconName = useCallback((provider: SocialLoginProvider) => {
-    return provider === 'Google' ? IconName.google : IconName.microsoft
+    return provider === 'Google' ? ICONS_TYPES.WorldDollar : ICONS_TYPES.Building
   }, [])
 
   return (
@@ -97,7 +97,7 @@ const Login = () => {
       <BrandPanel>
         <BrandMark>
           <BrandIcon>
-            <Icon name={IconName.parkohl} size={30} />
+            <Icon icon={ICONS_TYPES.LogoShortCyan} size={30} />
           </BrandIcon>
           PARKOHL
         </BrandMark>
@@ -116,7 +116,7 @@ const Login = () => {
       <FormPanel>
         <LoginCard onSubmit={handleLogin}>
           <LockBadge>
-            <Icon name={IconName.lock} size={44} />
+            <Icon icon={ICONS_TYPES.Lock} size={44} />
           </LockBadge>
           <FormHeader>
             <FormTitle>Iniciar sesion</FormTitle>
@@ -126,7 +126,7 @@ const Login = () => {
           <FieldGroup>
             Correo electronico
             <FieldShell>
-              <Icon name={IconName.email} />
+              <Icon icon={ICONS_TYPES.Mail} size={22} />
               <TextInput
                 autoComplete="email"
                 inputMode="email"
@@ -141,7 +141,7 @@ const Login = () => {
           <FieldGroup>
             Contrasena
             <FieldShell $hasAction>
-              <Icon name={IconName.lock} />
+              <Icon icon={ICONS_TYPES.Lock} size={22} />
               <TextInput
                 autoComplete="current-password"
                 onChange={handlePasswordChange}
@@ -153,7 +153,7 @@ const Login = () => {
                 aria-label="Mostrar u ocultar contrasena"
                 onClick={handlePasswordVisibilityToggle}
                 type="button">
-                <Icon name={IconName.eye} />
+                <Icon icon={ICONS_TYPES.Eye} size={22} />
               </IconAction>
             </FieldShell>
           </FieldGroup>
@@ -161,7 +161,7 @@ const Login = () => {
           <FormOptions>
             <RememberButton onClick={handleRememberToggle} type="button">
               <Checkbox $isChecked={formState.rememberMe}>
-                {formState.rememberMe && <Icon name={IconName.check} size={18} />}
+                {formState.rememberMe && <Icon icon={ICONS_TYPES.CheckMark} size={18} />}
               </Checkbox>
               Recordarme
             </RememberButton>
